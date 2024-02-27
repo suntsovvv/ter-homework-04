@@ -10,6 +10,9 @@ resource "yandex_vpc_subnet" "develop" {
 
 
 module "test-vm" {
+  labels = {
+    label = "marketing"
+  }
   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
   env_name       = "develop"
   network_id     = yandex_vpc_network.develop.id
@@ -20,14 +23,14 @@ module "test-vm" {
   image_family   = "ubuntu-2004-lts"
   public_ip      = true
 
-  metadata = {
-    user-data          = data.template_file.cloudinit.rendered #Для демонстрации №3
-    serial-port-enable = 1
-  }
+  metadata = local.vms_metadata
 
 }
 
 module "example-vm" {
+  labels = {
+    label = "analytics"
+  }
   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
   env_name       = "stage"
   network_id     = yandex_vpc_network.develop.id
@@ -38,13 +41,14 @@ module "example-vm" {
   image_family   = "ubuntu-2004-lts"
   public_ip      = true
 
-  metadata = {
-    user-data          = data.template_file.cloudinit.rendered #Для демонстрации №3
-    serial-port-enable = 1
-  }
 
+  metadata =local.vms_metadata
 }
 
-#Пример передачи cloud-config в ВМ для демонстрации №3
+
 data "template_file" "cloudinit" {
   template = file("./cloud-init.yml")
+  vars = {
+     ssh_public_key = var.ssh_public_key
+  }
+}

@@ -1,18 +1,16 @@
 ###cloud vars
-variable "token" {
-  type        = string
-  description = "OAuth-token; https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token"
-}
-
 variable "cloud_id" {
   type        = string
   description = "https://cloud.yandex.ru/docs/resource-manager/operations/cloud/get-id"
+  default     = "b1g6dgftb02k9esf1nmu"
 }
 
 variable "folder_id" {
   type        = string
   description = "https://cloud.yandex.ru/docs/resource-manager/operations/folder/get-id"
+  default     = "b1gksj8p2pj7de0re301"
 }
+
 
 variable "default_zone" {
   type        = string
@@ -52,6 +50,44 @@ variable "vm_db_name" {
   default     = "netology-develop-platform-db"
   description = "example vm_db_ prefix"
 }
+variable "ssh_public_key" {
+  type    = string
+  default = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICQHGZDYpyd9mjTq69K8bZrI5gbHOofvAjTit8Td1ex8 user@study"
+
+ 
+}
+variable "test-vm" {
+  type = map
+default = {
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+  env_name       = "develop"
+  network_id     = "yandex_vpc_network.develop.id"
+  subnet_zones   = "ru-central1-a"
+  subnet_ids     = "yandex_vpc_subnet.develop.id"
+  instance_name  = "web"
+  instance_count = 1
+  image_family   = "ubuntu-2004-lts"
+  public_ip      = true
+
+}
+}
+variable "example-vm" {
+  type = map 
+  default = {
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+  env_name       = "stage"
+  network_id     = "yandex_vpc_network.develop.id"
+  subnet_zones   = "ru-central1-a"
+  subnet_ids     = "yandex_vpc_subnet.develop.id"
+  instance_name  = "web-stage"
+  instance_count = 1
+  image_family   = "ubuntu-2004-lts"
+  public_ip      = true
+
+}
 
 
+  
+  
+}
 
