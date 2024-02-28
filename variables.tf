@@ -56,38 +56,29 @@ variable "ssh_public_key" {
 
  
 }
-variable "test-vm" {
-  type = map
-default = {
-  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
-  env_name       = "develop"
-  network_id     = "yandex_vpc_network.develop.id"
-  subnet_zones   = "ru-central1-a"
-  subnet_ids     = "yandex_vpc_subnet.develop.id"
-  instance_name  = "web"
-  instance_count = 1
-  image_family   = "ubuntu-2004-lts"
-  public_ip      = true
 
+
+variable "test_vm" {
+  default = { 
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main",
+  env_name       = "develop",
+  subnet_zones   = "ru-central1-a",
+  instance_name  = "web",
+  instance_count = 1,
+  image_family   = "ubuntu-2004-lts",
+  public_ip      = true,
+  serial-port-enable = 1
+  }
 }
+variable "example_vm" {
+  default = { 
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main",
+  env_name       = "stage",
+  subnet_zones   = "ru-central1-a",
+  instance_name  = "web-stage",
+  instance_count = 1,
+  image_family   = "ubuntu-2004-lts",
+  public_ip      = true,
+  serial-port-enable = 1
+  }
 }
-variable "example-vm" {
-  type = map 
-  default = {
-  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
-  env_name       = "stage"
-  network_id     = "yandex_vpc_network.develop.id"
-  subnet_zones   = "ru-central1-a"
-  subnet_ids     = "yandex_vpc_subnet.develop.id"
-  instance_name  = "web-stage"
-  instance_count = 1
-  image_family   = "ubuntu-2004-lts"
-  public_ip      = true
-
-}
-
-
-  
-  
-}
-
