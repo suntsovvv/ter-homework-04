@@ -272,7 +272,7 @@ user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform console
 }
 >
 ```
-Сгенерирoвад документацию к модулю с помощью terraform-docs:   
+Сгенерирoвал документацию к модулю с помощью terraform-docs:   
 
 ```
 user@study:~/home_work/ter-homeworks/ter-homeworks-04$ sudo terraform-docs markdown table --output-file Readme.md ./vpc
