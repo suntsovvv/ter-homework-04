@@ -319,4 +319,120 @@ No modules.
 | <a name="output_vpc_network"></a> [vpc\_network](#output\_vpc\_network) | Yandex vpc network |
 | <a name="output_vpc_subnet"></a> [vpc\_subnet](#output\_vpc\_subnet) | Yandex vpc subnet |
 <!-- END_TF_DOCS -->
+```   
+### Задание 3
+1. Выведите список ресурсов в стейте.
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform state list
+data.template_file.cloudinit
+module.example-vm.data.yandex_compute_image.my_image
+module.example-vm.yandex_compute_instance.vm[0]
+module.test-vm.data.yandex_compute_image.my_image
+module.test-vm.yandex_compute_instance.vm[0]
+module.vpc.yandex_vpc_network.network
+module.vpc.yandex_vpc_subnet.subnet
+```
+2. Полностью удалите из стейта модуль vpc.
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform state rm module.vpc
+Removed module.vpc.yandex_vpc_network.network
+Removed module.vpc.yandex_vpc_subnet.subnet
+Successfully removed 2 resource instance(s).
+```
+3. Полностью удалите из стейта модуль vm.
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform state rm module.test-vm
+Removed module.test-vm.data.yandex_compute_image.my_image
+Removed module.test-vm.yandex_compute_instance.vm[0]
+Successfully removed 2 resource instance(s).
+```
+4. Импортируйте всё обратно. Проверьте terraform plan. Изменений быть не должно.
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform import module.vpc.yandex_vpc_network.network enpapie1gqevih07fjf2
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=0e4eef7ccc45c95b0fd066bfa8768e55f718d51e123c0528a8a2509f0a674271]
+module.vpc.yandex_vpc_network.network: Importing from ID "enpapie1gqevih07fjf2"...
+module.example-vm.data.yandex_compute_image.my_image: Reading...
+module.test-vm.data.yandex_compute_image.my_image: Reading...
+module.vpc.yandex_vpc_network.network: Import prepared!
+  Prepared yandex_vpc_network for import
+module.vpc.yandex_vpc_network.network: Refreshing state... [id=enpapie1gqevih07fjf2]
+module.example-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+module.test-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+```   
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform import module.vpc.yandex_vpc_subnet.subnet e9bt7lmeap8p2075eh0g
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=0e4eef7ccc45c95b0fd066bfa8768e55f718d51e123c0528a8a2509f0a674271]
+module.example-vm.data.yandex_compute_image.my_image: Reading...
+module.test-vm.data.yandex_compute_image.my_image: Reading...
+module.vpc.yandex_vpc_subnet.subnet: Importing from ID "e9bt7lmeap8p2075eh0g"...
+module.vpc.yandex_vpc_subnet.subnet: Import prepared!
+  Prepared yandex_vpc_subnet for import
+module.vpc.yandex_vpc_subnet.subnet: Refreshing state... [id=e9bt7lmeap8p2075eh0g]
+module.example-vm.data.yandex_compute_image.my_image: Read complete after 8s [id=fd8t849k1aoosejtcicj]
+module.test-vm.data.yandex_compute_image.my_image: Read complete after 8s [id=fd8t849k1aoosejtcicj]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+```   
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform import module.test-vm.yandex_compute_instance.vm[0] fhmahajga8dptrt7cbdj
+module.example-vm.data.yandex_compute_image.my_image: Reading...
+module.test-vm.data.yandex_compute_image.my_image: Reading...
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=0e4eef7ccc45c95b0fd066bfa8768e55f718d51e123c0528a8a2509f0a674271]
+module.test-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+module.test-vm.yandex_compute_instance.vm[0]: Importing from ID "fhmahajga8dptrt7cbdj"...
+module.test-vm.yandex_compute_instance.vm[0]: Import prepared!
+  Prepared yandex_compute_instance for import
+module.test-vm.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmahajga8dptrt7cbdj]
+module.example-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+```   
+```
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ terraform plan
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=0e4eef7ccc45c95b0fd066bfa8768e55f718d51e123c0528a8a2509f0a674271]
+module.test-vm.data.yandex_compute_image.my_image: Reading...
+module.vpc.yandex_vpc_network.network: Refreshing state... [id=enpapie1gqevih07fjf2]
+module.example-vm.data.yandex_compute_image.my_image: Reading...
+module.test-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+module.example-vm.data.yandex_compute_image.my_image: Read complete after 9s [id=fd8t849k1aoosejtcicj]
+module.vpc.yandex_vpc_subnet.subnet: Refreshing state... [id=e9bt7lmeap8p2075eh0g]
+module.example-vm.yandex_compute_instance.vm[0]: Refreshing state... [id=fhm8tukpte1qfo121b7q]
+module.test-vm.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmahajga8dptrt7cbdj]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # module.test-vm.yandex_compute_instance.vm[0] will be updated in-place
+  ~ resource "yandex_compute_instance" "vm" {
+      + allow_stopping_for_update = true
+        id                        = "fhmahajga8dptrt7cbdj"
+        name                      = "develop-web-0"
+        # (11 unchanged attributes hidden)
+
+        # (6 unchanged blocks hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+user@study:~/home_work/ter-homeworks/ter-homeworks-04$ 
 ```
