@@ -436,3 +436,98 @@ Plan: 0 to add, 1 to change, 0 to destroy.
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
 user@study:~/home_work/ter-homeworks/ter-homeworks-04$ 
 ```
+### Задание 4*
+```hcl
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+  required_version = ">=1.5"
+}
+ 
+
+resource "yandex_vpc_network" "network" {
+  name = var.env_name
+}
+/*
+resource "yandex_vpc_subnet" "subnet" {
+  name           = "${var.env_name}-${var.zone}"
+  zone           = var.zone
+  network_id     = yandex_vpc_network.network.id
+  v4_cidr_blocks = var.v4_cidr_block
+}*/
+resource "yandex_vpc_subnet" "subnet" {
+  for_each = { for s in var.subnets : index(var.subnets,s)=> s }
+  name           = "${var.env_name}-${each.value.zone}"
+  zone           = each.value.zone
+  network_id     = yandex_vpc_network.network.id
+  v4_cidr_blocks = [each.value.cidr]
+}
+```
+```
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.vpc.yandex_vpc_network.network will be created
+  + resource "yandex_vpc_network" "network" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "develop"
+      + subnet_ids                = (known after apply)
+    }
+
+  # module.vpc.yandex_vpc_subnet.subnet["0"] will be created
+  + resource "yandex_vpc_subnet" "subnet" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "develop-ru-central1-a"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # module.vpc.yandex_vpc_subnet.subnet["1"] will be created
+  + resource "yandex_vpc_subnet" "subnet" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "develop-ru-central1-b"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.2.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
+
+  # module.vpc.yandex_vpc_subnet.subnet["2"] will be created
+  + resource "yandex_vpc_subnet" "subnet" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "develop-ru-central1-c"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.3.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-c"
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+```
+![image](https://github.com/suntsovvv/ter-homework-04/assets/154943765/6f1ab022-ce40-44da-bf92-e25367e1f6dc)
